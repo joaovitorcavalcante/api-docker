@@ -1,0 +1,35 @@
+version: '3.7'
+
+services:
+  mysql:
+    container_name: mysql8
+    image: mysql:8
+    networks:
+      - api-docker-network
+    volumes:
+      - mysql8:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=1q2w3e!Q@W#E
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=admin
+      - MYSQL_DATABASE=api-docker
+
+  api-docker:
+    container_name: api-docker
+    build: .
+    networks:
+      - api-docker-network
+    ports:
+      - 5000:8080
+      - 5001:8081
+    depends_on:
+      - mysql
+
+networks:
+  api-docker-network:
+    name: api-docker-network
+    driver: bridge
+
+volumes:
+  mysql8:
+    name: mysql8
